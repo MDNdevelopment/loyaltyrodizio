@@ -5,9 +5,9 @@ import Navbar from "@/components/Navbar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Fein Kaffee",
+  title: "COW Rodizio",
   description:
-    "¡Sé parte de la comunidad de Fein Kaffee y obtén tu tarjeta de fidelización hoy!",
+    "¡Sé parte de la comunidad de COW Rodizio y obtén tu tarjeta de fidelización hoy!",
   icons: {
     icon: "/favicon.png",
   },
