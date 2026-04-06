@@ -1,4 +1,3 @@
-import generateJWT from "@/utils/generateJWT";
 import { useState, useEffect } from "react";
 
 export function useGetCardData() {
@@ -7,29 +6,10 @@ export function useGetCardData() {
 
   useEffect(() => {
     const getCardData = async () => {
-      const jwt = generateJWT(
-        process.env.NEXT_PUBLIC_LL_API_KEY,
-        process.env.NEXT_PUBLIC_LL_API_SECRET,
-        process.env.NEXT_PUBLIC_LL_USERNAME
-      );
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_TERMS_URL}${process.env.NEXT_PUBLIC_URL_PROGRAM}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: jwt,
-            },
-          }
-        );
+        const response = await fetch("/api/card-data");
         const data = await response.json();
-        setCardData({
-          business: data.business.name,
-          collectValue: data.collectValue,
-          description: data.description,
-          terms: data.terms,
-        });
+        setCardData(data);
         setIsLoading(false);
       } catch (e) {
         console.log(e);

@@ -1,13 +1,22 @@
-import callWebhook from "./callWebhook";
-
 export default async function checkUser(payload) {
   try {
-    const response = await callWebhook(
-      process.env.NEXT_PUBLIC_URL_CHECK,
-      payload
-    );
+    console.log({ payload });
+    const response = await fetch("/api/check-user", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
 
-    if (response.data.isRegistered) {
+    const data = await response.json();
+
+    console.log({ data });
+    if (data.error) {
+      return {
+        ok: false,
+        errors: data.error,
+      };
+    }
+    if (data.isRegistered) {
       return {
         ok: true,
         userExists: true,

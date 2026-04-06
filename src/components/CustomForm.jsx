@@ -39,7 +39,8 @@ export default function CustomForm() {
     };
     console.log(payload);
     const check = await checkUser(payload);
-    if (check.userExists || !check.ok) {
+
+    if (check.userExists || !check.ok || check.error) {
       setIsLoading(false);
       setEnrollError(check.errors);
       return;
@@ -52,7 +53,7 @@ export default function CustomForm() {
       return;
     }
 
-    //Take the user to the card website if the registration finished successfully
+    // //Take the user to the card website if the registration finished successfully
 
     const add = await addUser({
       ...payload,
@@ -60,7 +61,6 @@ export default function CustomForm() {
       cardLink: enroll.url,
     });
 
-    console.log({ add });
     if (!add) {
       const cardURL = `https://q.passkit.net/~/#/p/${enroll.pid}`;
       window.location.replace(cardURL);

@@ -2,13 +2,24 @@
 
 import { useRegisteredStore } from "../stores/registeredStore";
 import { redirect } from "next/navigation";
+import { useState, useEffect } from "react";
+
+const PLAY_STORE_URL =
+  "https://play.google.com/store/apps/details?id=io.walletpasses.android&hl=en";
 
 export default function page() {
   const { isRegistered, userEmail } = useRegisteredStore.getState();
+  const [isAndroid, setIsAndroid] = useState(false);
+
+  useEffect(() => {
+    if (/android/i.test(navigator.userAgent)) {
+      setIsAndroid(true);
+    }
+  }, []);
 
   console.log(isRegistered);
   if (!isRegistered) {
-    // redirect("/");
+    redirect("/");
   }
   return (
     <div className="d-flex justify-center items-center pt-10 w-5/6 lg:w-4/6 mx-auto">
@@ -23,6 +34,21 @@ export default function page() {
         tu bandeja, revisa la carpeta de SPAM). En ese enlace, también podrás
         guardar tu tarjeta en tu app de billetera.{" "}
       </p>
+      {isAndroid && (
+        <p className="text-center mt-4 text-sm text-gray-700 bg-red-50 border-l-4 border-primary-800 px-4 py-3 rounded-r-md w-full lg:w-2/3 mx-auto">
+          Si usas Android, asegurate de tener la app{" "}
+          <strong>WalletPasses</strong> instalada antes de abrir el enlace de tu
+          tarjeta.{" "}
+          <a
+            href={PLAY_STORE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-green-700 underline font-semibold"
+          >
+            Descargar en Play Store
+          </a>
+        </p>
+      )}
       <p className="text-primary-600 text-xl text-center mt-5 font-bold d-block">
         ¡Gracias por unirte a nosotros!
       </p>
