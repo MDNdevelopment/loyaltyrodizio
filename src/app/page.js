@@ -12,7 +12,7 @@ export default function Home() {
   }
   return (
     <main className="text-center">
-      <h1 className=" text-[2em] lg:text-[2.5em] font-boTakld text-primary-600 text-center mt-10">
+      <h1 className=" text-[2em] lg:text-[2.5em] font-bold text-primary-600 text-center mt-10">
         COW {cardData.business}
       </h1>
 
