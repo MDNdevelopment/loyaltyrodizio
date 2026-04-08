@@ -1,26 +1,29 @@
 "use client";
 
 import { useRegisteredStore } from "../stores/registeredStore";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 const PLAY_STORE_URL =
   "https://play.google.com/store/apps/details?id=io.walletpasses.android&hl=en";
 
 export default function page() {
-  const { isRegistered, userEmail } = useRegisteredStore.getState();
+  const isRegistered = useRegisteredStore((state) => state.isRegistered);
+  const userEmail = useRegisteredStore((state) => state.userEmail);
   const [isAndroid, setIsAndroid] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
+    if (!isRegistered) {
+      router.push("/");
+    }
     if (/android/i.test(navigator.userAgent)) {
       setIsAndroid(true);
     }
-  }, []);
+  }, [isRegistered, router]);
 
-  console.log(isRegistered);
-  if (!isRegistered) {
-    redirect("/");
-  }
+  if (!isRegistered) return null;
+
   return (
     <div className="d-flex justify-center items-center pt-10 w-5/6 lg:w-4/6 mx-auto">
       <h1 className="font-bold text-3xl lg:text-5xl text-center">
