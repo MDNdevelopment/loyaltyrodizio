@@ -2,7 +2,8 @@
 
 import { useRegisteredStore } from "../stores/registeredStore";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import detectPlatform from "@/utils/detectPlatform";
 
 const PLAY_STORE_URL =
   "https://play.google.com/store/apps/details?id=io.walletpasses.android&hl=en";
@@ -10,16 +11,14 @@ const PLAY_STORE_URL =
 export default function page() {
   const isRegistered = useRegisteredStore((state) => state.isRegistered);
   const userEmail = useRegisteredStore((state) => state.userEmail);
-  const [isAndroid, setIsAndroid] = useState(false);
+  const [platform, setPlatform] = useState("unknown");
   const router = useRouter();
 
   useEffect(() => {
     if (!isRegistered) {
       router.push("/");
     }
-    if (/android/i.test(navigator.userAgent)) {
-      setIsAndroid(true);
-    }
+    setPlatform(detectPlatform());
   }, [isRegistered, router]);
 
   if (!isRegistered) return null;
@@ -37,7 +36,7 @@ export default function page() {
         tu bandeja, revisa la carpeta de SPAM). En ese enlace, también podrás
         guardar tu tarjeta en tu app de billetera.{" "}
       </p>
-      {isAndroid && (
+      {platform === "android" && (
         <p className="text-center mt-4 text-sm text-gray-700 bg-red-50 border-l-4 border-primary-800 px-4 py-3 rounded-r-md w-full lg:w-2/3 mx-auto">
           Si usas Android, asegurate de tener la app{" "}
           <strong>WalletPasses</strong> instalada antes de abrir el enlace de tu
@@ -50,6 +49,12 @@ export default function page() {
           >
             Descargar en Play Store
           </a>
+        </p>
+      )}
+      {platform === "ios" && (
+        <p className="text-center mt-4 text-sm text-gray-700 bg-red-50 border-l-4 border-primary-800 px-4 py-3 rounded-r-md w-full lg:w-2/3 mx-auto">
+          Si usas iPhone o iPad, abrí el correo <strong>desde Safari</strong>{" "}
+          para que puedas guardar la tarjeta en Wallet sin problemas.
         </p>
       )}
       <p className="text-primary-600 text-xl text-center mt-5 font-bold d-block">
